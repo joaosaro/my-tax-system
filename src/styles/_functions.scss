@@ -1,0 +1,8 @@
+@function color($color, $shade: null) {
+  $shades: map-get($colors, $color);
+
+  @if type-of($shades) == "map" {
+    @return map-get($shades, $shade);
+  }
+  @return $shades;
+}
