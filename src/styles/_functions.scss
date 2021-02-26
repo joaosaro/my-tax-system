@@ -6,3 +6,7 @@
   }
   @return $shades;
 }
+
+@function spacing($multiplier) {
+  @return calc(var(--spacing) * #{$multiplier});
+}

@@ -1,5 +1,6 @@
 @import "normalize";
 @import "globals";
+@import "css-vars";
 
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap");
 
@@ -46,6 +47,5 @@ li {
 }
 
 .app {
-  color: color("blue", 500);
   height: 100%;
 }
