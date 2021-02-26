@@ -1,11 +1,12 @@
 import React from "react";
 import "./styles/styles.scss";
-import { Button } from "antd";
+import Header from "./modules/header";
+import "./styles/styles.scss";
 
 function App() {
   return (
     <div className="app">
-      <Button onClick={() => console.log("helo")}>Hello Button</Button>
+      <Header />
     </div>
   );
 }
