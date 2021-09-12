@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
+import { useTaxSystem } from "../../app-state/tax-system";
 import "./styles.scss";
 
 const Form = () => {
-  const [escaloes, setEscaloes] = useState(5);
+  const { rankCount, setRankCount } = useTaxSystem();
 
-  // eslint-disable-next-line prettier/prettier
   const onChangeEscaloes = (event) => {
     const newNumber = Number(event.target.value);
 
-    setEscaloes(newNumber >= 0 ? newNumber : escaloes);
+    setRankCount(newNumber >= 0 ? newNumber : rankCount);
   };
 
   return (
@@ -21,13 +21,13 @@ const Form = () => {
           id="quantos"
           className="form__input"
           type="number"
-          value={escaloes}
+          value={rankCount}
           onChange={onChangeEscaloes}
         />
       </div>
       <hr />
 
-      {[...new Array(escaloes + 1)].fill(0).map((_, index) => {
+      {[...new Array(rankCount + 1)].fill(0).map((_, index) => {
         return (
           <div className="form__field" key={index}>
             <label className="form__label" htmlFor={"escalao" + index}>

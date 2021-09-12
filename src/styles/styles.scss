@@ -51,9 +51,6 @@ li {
 }
 
 .main {
-  display: flex;
-
-  > * {
-    flex: 1;
-  }
+  display: grid;
+  grid-template-columns: min-content 1fr;
 }
