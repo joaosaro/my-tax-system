@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Line } from "react-chartjs-2";
-import { irsCalc } from "./calculos";
-import { escaloes } from "./escaloes";
+import { useTaxSystem } from "../../app-state/tax-system";
+import { portugueseTaxSystem } from "../../data/tax-system";
+import { wages } from "../../data/wages";
+import { calcIRS } from "../../utils/irs-calcs";
+import { parseCurrency, parsePercentage } from "../../utils/parseValues";
 import "./styles.scss";
 
 const data = {
@@ -30,16 +33,24 @@ const options = {
 };
 
 const Graph = () => {
+  const [isMonthlyWage, setIsMonthlyWage] = useState(false);
+  const [taxSystem, setTaxSystem] = useState(portugueseTaxSystem);
+
   return (
     <div className="results">
       <div className="graph">
         <Line data={data} options={options} />
       </div>
       <hr />
+      <div>
+        <button onClick={() => setIsMonthlyWage(!isMonthlyWage)}>
+          {isMonthlyWage ? "Mudar para anual" : "Mudar para mensal"}
+        </button>
+      </div>
       <table className="table-irs">
         <thead>
           <tr>
-            <th>Rendimento anual</th>
+            <th>Rendimento {isMonthlyWage ? "mensal" : "anual"}</th>
             <th>IRS</th>
             <th>Taxa efectiva</th>
             <th>Total com TSU - empregado</th>
@@ -47,31 +58,28 @@ const Graph = () => {
           </tr>
         </thead>
         <tbody>
-          {[
-            // 665,
-            // 750,
-            // 875,
-            // 1000,
-            // 1250,
-            1500,
-            // 1750,
-            // 2000,
-            // 2500,
-            // 3000,
-            // 4000,
-            // 5000,
-            // 7500,
-            // 10000,
-          ].map((rendimento, index) => {
-            const rendimentoAnual = rendimento * 14;
+          {wages.map((monthlyWage) => {
+            const anualWage = monthlyWage * 14;
+            const irs = calcIRS(anualWage, taxSystem);
+            const tsu = anualWage * 0.11;
+            const netWage = anualWage - irs - tsu;
+
+            // To present
+            const wage = parseCurrency(isMonthlyWage ? monthlyWage : anualWage);
+            const irsParsed = parseCurrency(isMonthlyWage ? irs / 12 : irs);
+            const effectiveRank = parsePercentage(irs / anualWage);
+            const ssParsed = parseCurrency(isMonthlyWage ? tsu / 12 : tsu);
+            const netParsed = parseCurrency(
+              isMonthlyWage ? netWage / 12 : netWage
+            );
 
             return (
-              <tr key={index}>
-                <td>{rendimentoAnual}€</td>
-                <td>{irsCalc(rendimentoAnual, escaloes)}</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
+              <tr key={monthlyWage}>
+                <td>{wage}</td>
+                <td>{irsParsed}</td>
+                <td>{effectiveRank}</td>
+                <td>{ssParsed}</td>
+                <td>{netParsed}</td>
               </tr>
             );
           })}

@@ -8,7 +8,7 @@ type TaxSystemContextType = {
 const TaxSystemContext = createContext<TaxSystemContextType>({ rankCount: 5 });
 
 export const TaxSystemProvider: FC = ({ children }) => {
-  const [rankCount, setRankCount] = useState(5);
+  const [rankCount, setRankCount] = useState(7);
 
   return (
     <TaxSystemContext.Provider value={{ rankCount, setRankCount }}>
